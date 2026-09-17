@@ -12,14 +12,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function openMobileDrawer() {
     if (mobileDrawer) mobileDrawer.classList.add('open');
-    if (mainNav) mainNav.classList.add('open');
     if (mobileDrawerOverlay) mobileDrawerOverlay.classList.add('active');
     document.body.style.overflow = 'hidden';
   }
 
   function closeMobileDrawer() {
     if (mobileDrawer) mobileDrawer.classList.remove('open');
-    if (mainNav) mainNav.classList.remove('open');
     if (mobileDrawerOverlay) mobileDrawerOverlay.classList.remove('active');
     document.body.style.overflow = '';
   }

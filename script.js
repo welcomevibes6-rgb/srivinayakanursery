@@ -5,27 +5,47 @@
 document.addEventListener('DOMContentLoaded', () => {
   // 1. Mobile Menu Drawer Toggle
   const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+  const mobileDrawer = document.getElementById('mobileDrawer');
+  const mobileDrawerCloseBtn = document.getElementById('mobileDrawerCloseBtn');
+  const mobileDrawerOverlay = document.getElementById('mobileDrawerOverlay') || document.getElementById('mobileNavOverlay');
   const mainNav = document.getElementById('mainNav');
-  const mobileNavOverlay = document.getElementById('mobileNavOverlay');
 
-  if (mobileMenuBtn && mainNav && mobileNavOverlay) {
-    function toggleMobileMenu() {
-      mainNav.classList.toggle('open');
-      mobileNavOverlay.classList.toggle('active');
-      document.body.style.overflow = mainNav.classList.contains('open') ? 'hidden' : '';
-    }
+  function openMobileDrawer() {
+    if (mobileDrawer) mobileDrawer.classList.add('open');
+    if (mainNav) mainNav.classList.add('open');
+    if (mobileDrawerOverlay) mobileDrawerOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
 
-    mobileMenuBtn.addEventListener('click', toggleMobileMenu);
-    mobileNavOverlay.addEventListener('click', toggleMobileMenu);
+  function closeMobileDrawer() {
+    if (mobileDrawer) mobileDrawer.classList.remove('open');
+    if (mainNav) mainNav.classList.remove('open');
+    if (mobileDrawerOverlay) mobileDrawerOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+  }
 
-    mainNav.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        if (mainNav.classList.contains('open')) {
-          toggleMobileMenu();
-        }
-      });
+  if (mobileMenuBtn) {
+    mobileMenuBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openMobileDrawer();
     });
   }
+
+  if (mobileDrawerCloseBtn) {
+    mobileDrawerCloseBtn.addEventListener('click', closeMobileDrawer);
+  }
+
+  if (mobileDrawerOverlay) {
+    mobileDrawerOverlay.addEventListener('click', closeMobileDrawer);
+  }
+
+  // Close drawer on clicking any menu link
+  const drawerLinks = document.querySelectorAll('.mobile-nav-link, .main-nav a');
+  drawerLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      closeMobileDrawer();
+    });
+  });
 
   // 2. Cart Manager & Shopping Bag Interaction
   const CART_STORAGE_KEY = 'sri_vinayaka_cart';

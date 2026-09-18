@@ -288,30 +288,31 @@ document.addEventListener('DOMContentLoaded', () => {
         '',
         'Hello Sri Vinayaka Nursery,',
         '',
-        'I would like to enquire about the following plants:',
+        'I would like to enquire about:',
         ''
       ];
 
-      cart.forEach((item, idx) => {
+      cart.forEach((item) => {
         const cat = (item.category || '').toLowerCase();
         const icon = cat.includes('palm') ? '🌴' : 
                      cat.includes('flower') ? '🌸' : 
-                     cat.includes('fruit') ? '🍊' : '🌱';
+                     cat.includes('fruit') ? '🍊' : 
+                     cat.includes('tree') || cat.includes('avenue') ? '🌳' : '🌱';
         
         let imgUrl = item.img || '';
         if (imgUrl && !imgUrl.startsWith('http')) {
           imgUrl = `${domainBase}/${encodeURI(imgUrl.replace(/^\//, ''))}`;
         }
 
-        msgLines.push(`${icon} ${idx + 1}. ${item.name}`);
+        msgLines.push(`${icon} ${item.name}`);
         msgLines.push(`Quantity: ${item.quantity}`);
         if (imgUrl) {
-          msgLines.push(`Plant Image: ${imgUrl}`);
+          msgLines.push(`📷 Photo: ${imgUrl}`);
         }
         msgLines.push('');
       });
 
-      msgLines.push('Please share the availability and quotation for these plants.');
+      msgLines.push('Please share availability and quotation.');
       msgLines.push('');
       msgLines.push('Thank you.');
 

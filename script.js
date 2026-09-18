@@ -94,13 +94,15 @@ document.addEventListener('DOMContentLoaded', () => {
           name: product.name || 'Sri Vinayaka Plant',
           category: product.category || 'Nursery Plant',
           img: product.img,
-          price: product.price || 299,
           quantity: product.quantity || 1
         });
       }
 
       this.saveCart(cart);
       this.showToast(`Added "${product.name || 'Plant'}" to cart!`);
+      if (typeof openCartDrawer === 'function') {
+        openCartDrawer();
+      }
 
       // Meta Pixel AddToCart Event
       if (typeof window.fbq === 'function') {
@@ -109,7 +111,6 @@ document.addEventListener('DOMContentLoaded', () => {
           content_category: product.category || 'Nursery Plant',
           content_ids: product.id ? [String(product.id)] : [],
           content_type: 'product',
-          value: (product.price || 0) * (product.quantity || 1),
           currency: 'INR'
         });
       }
@@ -138,11 +139,6 @@ document.addEventListener('DOMContentLoaded', () => {
       return cart.reduce((sum, i) => sum + i.quantity, 0);
     },
 
-    getTotalPrice() {
-      const cart = this.getCart();
-      return cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
-    },
-
     showToast(msg) {
       const toast = document.getElementById('cartToast');
       const toastMsg = document.getElementById('cartToastMsg');
@@ -155,7 +151,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     updateUI() {
       const totalCount = this.getTotalCount();
-      const totalPrice = this.getTotalPrice();
 
       // Navbar badge counts across pages
       const bagBadgeCounts = document.querySelectorAll('#bagBadgeCount');
@@ -167,12 +162,6 @@ document.addEventListener('DOMContentLoaded', () => {
         cartDrawerItemCount.textContent = `${totalCount} item${totalCount !== 1 ? 's' : ''}`;
         cartDrawerItemCount.style.display = totalCount > 0 ? 'inline-block' : 'none';
       }
-
-      // Subtotal & Total in drawer footer (No actual product pricing displayed)
-      const cartSubtotal = document.getElementById('cartSubtotal');
-      const cartTotal = document.getElementById('cartTotal');
-      if (cartSubtotal) cartSubtotal.textContent = `₹0`;
-      if (cartTotal) cartTotal.textContent = `₹0`;
 
       const cartDrawerFooter = document.getElementById('cartDrawerFooter');
       const cartDrawerBody = document.getElementById('cartDrawerBody');
@@ -196,7 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const cartBrowseBtn = document.getElementById('cartBrowseBtn');
           if (cartBrowseBtn) {
             cartBrowseBtn.addEventListener('click', () => {
-              closeCartDrawer();
+              if (typeof closeCartDrawer === 'function') closeCartDrawer();
             });
           }
         } else {
@@ -208,10 +197,11 @@ document.addEventListener('DOMContentLoaded', () => {
               </div>
               <div class="cart-item-details">
                 <strong class="cart-item-name">${item.name}</strong>
+                ${item.category ? `<span class="cart-item-sub">${item.category}</span>` : ''}
                 <div class="cart-qty-controls">
-                  <button class="cart-qty-btn btn-qty-minus" data-id="${item.id}">-</button>
+                  <button class="cart-qty-btn btn-qty-minus" data-id="${item.id}" aria-label="Decrease quantity">-</button>
                   <span class="cart-qty-val">${item.quantity}</span>
-                  <button class="cart-qty-btn btn-qty-plus" data-id="${item.id}">+</button>
+                  <button class="cart-qty-btn btn-qty-plus" data-id="${item.id}" aria-label="Increase quantity">+</button>
                 </div>
               </div>
               <button class="cart-item-remove-btn" data-id="${item.id}" aria-label="Remove item">
@@ -291,11 +281,39 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      let msgLines = ['Hello Sri Vinayaka Nursery! I would like to order the following items from my cart:\n'];
+      const domainBase = 'https://srivinayakanursery.vercel.app';
+
+      let msgLines = [
+        '🌿 Sri Vinayaka Nursery — Plant Enquiry',
+        '',
+        'Hello Sri Vinayaka Nursery,',
+        '',
+        'I would like to enquire about the following plants:',
+        ''
+      ];
+
       cart.forEach((item, idx) => {
-        msgLines.push(`${idx + 1}. ${item.name} - Qty: ${item.quantity}`);
+        const cat = (item.category || '').toLowerCase();
+        const icon = cat.includes('palm') ? '🌴' : 
+                     cat.includes('flower') ? '🌸' : 
+                     cat.includes('fruit') ? '🍊' : '🌱';
+        
+        let imgUrl = item.img || '';
+        if (imgUrl && !imgUrl.startsWith('http')) {
+          imgUrl = `${domainBase}/${encodeURI(imgUrl.replace(/^\//, ''))}`;
+        }
+
+        msgLines.push(`${icon} ${idx + 1}. ${item.name}`);
+        msgLines.push(`Quantity: ${item.quantity}`);
+        if (imgUrl) {
+          msgLines.push(`Plant Image: ${imgUrl}`);
+        }
+        msgLines.push('');
       });
-      msgLines.push('\nPlease confirm availability and doorstep delivery details.');
+
+      msgLines.push('Please share the availability and quotation for these plants.');
+      msgLines.push('');
+      msgLines.push('Thank you.');
 
       const encodedMsg = encodeURIComponent(msgLines.join('\n'));
 
@@ -305,8 +323,6 @@ document.addEventListener('DOMContentLoaded', () => {
           content_name: cart.map(i => i.name).join(', ') || 'WhatsApp Cart Order',
           content_ids: cart.map(i => String(i.id)),
           content_type: 'product',
-          value: CartManager.getTotalPrice(),
-          currency: 'INR',
           num_items: CartManager.getTotalCount()
         });
       }

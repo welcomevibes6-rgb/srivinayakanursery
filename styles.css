@@ -4746,14 +4746,41 @@ button, input {
   background-color: #FEE2E2;
 }
 
+.cart-item-sub {
+  font-size: 0.76rem;
+  color: #6b7280;
+  font-weight: 500;
+  margin-top: 0.1rem;
+}
+
 /* Cart Footer */
 .cart-drawer-footer {
-  padding: 1.25rem 1.5rem;
+  padding: 1.15rem 1.35rem;
   border-top: 1px solid #E5E7EB;
   background-color: #FAF9F5;
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
+  gap: 0.75rem;
+}
+
+.cart-enquiry-note {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.75rem 0.85rem;
+  background-color: rgba(27, 67, 50, 0.06);
+  border: 1px solid rgba(27, 67, 50, 0.12);
+  border-radius: 12px;
+  font-family: var(--font-body);
+  font-size: 0.825rem;
+  color: #1b4332;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.cart-enquiry-note .enquiry-note-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
 }
 
 .cart-summary-row {

@@ -37,9 +37,26 @@ document.addEventListener('DOMContentLoaded', () => {
     mobileDrawerOverlay.addEventListener('click', closeMobileDrawer);
   }
 
-  // Close drawer on clicking any menu link
-  const drawerLinks = document.querySelectorAll('.mobile-nav-link, .main-nav a');
-  drawerLinks.forEach(link => {
+  // Mobile Submenu Toggle Handler
+  const submenuToggles = document.querySelectorAll('.mobile-submenu-toggle');
+  submenuToggles.forEach(toggle => {
+    toggle.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+      const targetId = toggle.getAttribute('aria-controls');
+      const submenu = targetId ? document.getElementById(targetId) : toggle.nextElementSibling;
+      
+      toggle.setAttribute('aria-expanded', isExpanded ? 'false' : 'true');
+      if (submenu) {
+        submenu.classList.toggle('open');
+      }
+    });
+  });
+
+  // Close drawer on clicking navigation links (excluding toggle buttons)
+  const drawerNavLinks = document.querySelectorAll('.mobile-nav-link:not(.mobile-submenu-toggle), .mobile-submenu-link, .main-nav a');
+  drawerNavLinks.forEach(link => {
     link.addEventListener('click', () => {
       closeMobileDrawer();
     });
@@ -781,11 +798,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.ALL_CATALOG_PLANTS = allItems;
 
-  // 7. Catalog Page Category Filtering & Two-Button Product Cards Logic
-  const categoryPillsGrid = document.getElementById('categoryPillsGrid');
-  const catalogProductsGrid = document.getElementById('catalogProductsGrid');
-  const currentCategoryHeading = document.getElementById('currentCategoryHeading');
-  const currentCategorySubtitle = document.getElementById('currentCategorySubtitle');
+  // 7. Catalog Page Category Filtering & Two-Button Product Cards Logic (continued — uses variables declared above)
 
   if (catalogProductsGrid && categoryPillsGrid) {
 

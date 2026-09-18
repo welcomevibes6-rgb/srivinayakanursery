@@ -4441,19 +4441,19 @@ button, input {
   }
 
   .category-pills-wrap {
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 0.65rem;
-    overflow-x: auto;
-    padding: 0.5rem 0.6rem;
-    border-radius: 24px;
-    margin-bottom: 2rem;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 0.55rem 0.45rem !important;
+    padding: 0.75rem 0.5rem !important;
+    border-radius: 20px !important;
+    margin-bottom: 1.75rem !important;
+    background: rgba(255, 255, 255, 0.95) !important;
+    border: 1px solid rgba(27, 67, 50, 0.12) !important;
+    box-shadow: 0 4px 18px rgba(15, 56, 44, 0.05) !important;
+    overflow: visible !important;
+    width: 100% !important;
   }
 
   .category-pills-wrap::-webkit-scrollbar {
@@ -4461,16 +4461,24 @@ button, input {
   }
 
   .category-pill-btn {
-    padding: 0.55rem 1.1rem;
-    font-size: 0.85rem;
-    scroll-snap-align: start;
-    flex-shrink: 0;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.35rem !important;
+    padding: 0.48rem 0.8rem !important;
+    font-size: 0.8rem !important;
+    font-weight: 600 !important;
+    border-radius: 9999px !important;
+    white-space: nowrap !important;
+    flex: 0 0 auto !important;
+    margin: 0 !important;
+    max-width: 100% !important;
   }
 
   .cat-pill-emoji {
-    width: 26px;
-    height: 26px;
-    font-size: 0.95rem;
+    width: 22px !important;
+    height: 22px !important;
+    font-size: 0.825rem !important;
+    line-height: 1 !important;
   }
 
   .category-section-title {
@@ -7672,12 +7680,12 @@ html, body {
 
 .category-pills-wrap {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   align-items: center;
   gap: 0.75rem;
-  overflow-x: auto;
   padding-bottom: 0.75rem;
   margin-bottom: 2rem;
-  scrollbar-width: none;
 }
 
 .category-pills-wrap::-webkit-scrollbar {
